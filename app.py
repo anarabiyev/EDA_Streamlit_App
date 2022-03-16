@@ -60,7 +60,7 @@ if dataset:
             c1, c2, c3 = st.columns([0.5, 2, 0.5])
             c2.dataframe(functions.df_isnull(df), width=1500)
             functions.space(2)
-            st.write(f'<p style="font-size:130%">&nbsp &nbsp Graphical representation of null values:</p>', unsafe_allow_html=True)   
+            #st.write(f'<p style="font-size:130%">&nbsp &nbsp Graphical representation of null values:</p>', unsafe_allow_html=True)   
            
     if 'Descriptive Analysis' in vizuals:
         st.subheader('Descriptive Analysis:')
