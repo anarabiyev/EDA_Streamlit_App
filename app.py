@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import missingno as msno
+#import missingno as msno
 import plotly.express as px
 
 import functions
@@ -62,7 +62,7 @@ if dataset:
             c2.dataframe(functions.df_isnull(df), width=1500)
             functions.space(2)
             st.write(f'<p style="font-size:130%">&nbsp &nbsp Graphical representation of null values:</p>', unsafe_allow_html=True)   
-            st.pyplot(msno.matrix(df).figure)
+            #st.pyplot(msno.matrix(df).figure)
 
     if 'Descriptive Analysis' in vizuals:
         st.subheader('Descriptive Analysis:')
