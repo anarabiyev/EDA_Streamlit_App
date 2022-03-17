@@ -68,7 +68,7 @@ if dataset:
 
     if 'Descriptive Analysis' in vizuals:
         st.subheader('Descriptive Analysis:')
-        st.dataframe(df.describe())
+        st.dataframe(df.describe().T)
         
     if 'Target Analysis' in vizuals:
         st.subheader("Select target column:")    
