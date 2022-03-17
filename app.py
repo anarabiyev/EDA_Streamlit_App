@@ -24,7 +24,7 @@ st.write('<p style="font-size:100%">&nbsp 9. Obtain info of target value varianc
 functions.space()
 st.write('<p style="font-size:130%">Import Dataset</p>', unsafe_allow_html=True)
 
-file_format = st.radio('Select file format:', ('csv', 'excel'))
+file_format = st.radio('Select file format:', ('csv', 'excel'), key='file_format')
 dataset = st.file_uploader(label = '')
 
 use_defo = st.checkbox('Use example Dataset')
@@ -68,7 +68,7 @@ if dataset:
 
     if 'Descriptive Analysis' in vizuals:
         st.subheader('Descriptive Analysis:')
-        st.dataframe(df.describe().T)
+        st.dataframe(df.describe())
         
     if 'Target Analysis' in vizuals:
         st.subheader("Select target column:")    
@@ -145,21 +145,26 @@ if dataset:
         c2.dataframe(functions.number_of_outliers(df))
 
     if 'Variance of Target with Categorical Columns' in vizuals:
-        if len(cat_columns) == 0:
-            st.write('There is no categorical columns in the data.')
+        
+        
+        df_1 = df.dropna()
+        
+        high_cardi_columns = []
+        normal_cardi_columns = []
+
+        for i in cat_columns:
+            if (df[i].nunique() > df.shape[0] / 10):
+                high_cardi_columns.append(i)
+            else:
+                normal_cardi_columns.append(i)
+
+
+        if len(normal_cardi_columns) == 0:
+            st.write('There is no categorical columns with normal cardinality in the data.')
         else:
+        
             st.subheader('Variance of target variable with categorical columns')
-            df_1 = df.dropna()
-            
-            high_cardi_columns = []
-            normal_cardi_columns = []
-
-            for i in cat_columns:
-                if (df[i].nunique() > df.shape[0] / 10):
-                    high_cardi_columns.append(i)
-                else:
-                    normal_cardi_columns.append(i)
-
+            model_type = st.radio('Select Problem Type:', ('Regression', 'Classification'), key = 'model_type')
             selected_cat_cols = functions.sidebar_multiselect_container('Choose columns for Category Colored Box plots:', normal_cardi_columns, 'Category')
             
             if 'Target Analysis' not in vizuals:   
@@ -167,8 +172,14 @@ if dataset:
             
             i = 0
             while (i < len(selected_cat_cols)):
-        
-                fig = px.box(df_1, y = target_column, color = selected_cat_cols[i])
+                
+                
+            
+                if model_type == 'Regression':
+                    fig = px.box(df_1, y = target_column, color = selected_cat_cols[i])
+                else:
+                    fig = px.histogram(df_1, color = selected_cat_cols[i], x = target_column)
+
                 st.plotly_chart(fig, use_container_width = True)
                 i += 1
 
@@ -187,5 +198,3 @@ if dataset:
                     for i in high_cardi_columns:
                         fig = px.box(df_1, y = target_column, color = i)
                         st.plotly_chart(fig, use_container_width = True)
-
-    
