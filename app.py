@@ -64,8 +64,8 @@ if dataset:
             c1, c2, c3 = st.columns([0.5, 2, 0.5])
             c2.dataframe(functions.df_isnull(df), width=1500)
             functions.space(2)
-            #st.write(f'<p style="font-size:130%">&nbsp &nbsp Graphical representation of null values:</p>', unsafe_allow_html=True)   
-           
+            
+
     if 'Descriptive Analysis' in vizuals:
         st.subheader('Descriptive Analysis:')
         st.dataframe(df.describe())
@@ -100,20 +100,23 @@ if dataset:
                 i += 1
 
     if 'Count Plots of Categorical Columns' in vizuals:
-        
-        selected_cat_cols = functions.sidebar_multiselect_container('Choose columns for Count plots:', cat_columns, 'Count')
-        st.subheader('Count plots of categorical columns')
-        i = 0
-        while (i < len(selected_cat_cols)):
-            c1, c2 = st.columns(2)
-            for j in [c1, c2]:
 
-                if (i >= len(selected_cat_cols)):
-                    break
+        if len(cat_columns) == 0:
+            st.write('There is no categorical columns in the data.')
+        else:
+            selected_cat_cols = functions.sidebar_multiselect_container('Choose columns for Count plots:', cat_columns, 'Count')
+            st.subheader('Count plots of categorical columns')
+            i = 0
+            while (i < len(selected_cat_cols)):
+                c1, c2 = st.columns(2)
+                for j in [c1, c2]:
 
-                fig = px.histogram(df, x = selected_cat_cols[i], color_discrete_sequence=['indianred'])
-                j.plotly_chart(fig)
-                i += 1
+                    if (i >= len(selected_cat_cols)):
+                        break
+
+                    fig = px.histogram(df, x = selected_cat_cols[i], color_discrete_sequence=['indianred'])
+                    j.plotly_chart(fig)
+                    i += 1
 
     if 'Box Plots' in vizuals:
         
@@ -176,3 +179,5 @@ if dataset:
                 for i in high_cardi_columns:
                     fig = px.box(df_1, y = target_column, color = i)
                     st.plotly_chart(fig, use_container_width = True)
+
+    
