@@ -165,7 +165,7 @@ if dataset:
         
             st.subheader('Variance of target variable with categorical columns')
             model_type = st.radio('Select Problem Type:', ('Regression', 'Classification'), key = 'model_type')
-            selected_cat_cols = functions.sidebar_multiselect_container('Choose columns for Category Colored Box plots:', normal_cardi_columns, 'Category')
+            selected_cat_cols = functions.sidebar_multiselect_container('Choose columns for Category Colored plots:', normal_cardi_columns, 'Category')
             
             if 'Target Analysis' not in vizuals:   
                 target_column = st.selectbox("Select target column:", df.columns, index = len(df.columns) - 1)
