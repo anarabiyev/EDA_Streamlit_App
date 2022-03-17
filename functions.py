@@ -3,7 +3,7 @@ import pandas as pd
 import streamlit as st
 
 def df_info(df):
-
+    df.columns = df.columns.str.replace(' ', '_')
     buffer = io.StringIO() 
     df.info(buf=buffer)
     s = buffer.getvalue() 
