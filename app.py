@@ -34,7 +34,7 @@ if use_defo:
 st.sidebar.header('Import Dataset to Use Available Features: 👉')
 
 if dataset:
-    if file_format == 'csv':
+    if file_format == 'csv' or use_defo:
         df = pd.read_csv(dataset)
     else:
         df = pd.read_excel(dataset)
