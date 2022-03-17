@@ -85,19 +85,22 @@ if dataset:
 
     if 'Distribution of Numerical Columns' in vizuals:
 
-        selected_num_cols = functions.sidebar_multiselect_container('Choose columns for Distribution plots:', num_columns, 'Distribution')
-        st.subheader('Distribution of numerical columns')
-        i = 0
-        while (i < len(selected_num_cols)):
-            c1, c2 = st.columns(2)
-            for j in [c1, c2]:
+        if len(num_columns) == 0:
+            st.write('There is no numerical columns in the data.')
+        else:
+            selected_num_cols = functions.sidebar_multiselect_container('Choose columns for Distribution plots:', num_columns, 'Distribution')
+            st.subheader('Distribution of numerical columns')
+            i = 0
+            while (i < len(selected_num_cols)):
+                c1, c2 = st.columns(2)
+                for j in [c1, c2]:
 
-                if (i >= len(selected_num_cols)):
-                    break
+                    if (i >= len(selected_num_cols)):
+                        break
 
-                fig = px.histogram(df, x = selected_num_cols[i])
-                j.plotly_chart(fig, use_container_width = True)
-                i += 1
+                    fig = px.histogram(df, x = selected_num_cols[i])
+                    j.plotly_chart(fig, use_container_width = True)
+                    i += 1
 
     if 'Count Plots of Categorical Columns' in vizuals:
 
@@ -119,20 +122,22 @@ if dataset:
                     i += 1
 
     if 'Box Plots' in vizuals:
-        
-        selected_num_cols = functions.sidebar_multiselect_container('Choose columns for Box plots:', num_columns, 'Box')
-        st.subheader('Box plots')
-        i = 0
-        while (i < len(selected_num_cols)):
-            c1, c2 = st.columns(2)
-            for j in [c1, c2]:
-                
-                if (i >= len(selected_num_cols)):
-                    break
-                
-                fig = px.box(df, y = selected_num_cols[i])
-                j.plotly_chart(fig, use_container_width = True)
-                i += 1
+        if len(num_columns) == 0:
+            st.write('There is no numerical columns in the data.')
+        else:
+            selected_num_cols = functions.sidebar_multiselect_container('Choose columns for Box plots:', num_columns, 'Box')
+            st.subheader('Box plots')
+            i = 0
+            while (i < len(selected_num_cols)):
+                c1, c2 = st.columns(2)
+                for j in [c1, c2]:
+                    
+                    if (i >= len(selected_num_cols)):
+                        break
+                    
+                    fig = px.box(df, y = selected_num_cols[i])
+                    j.plotly_chart(fig, use_container_width = True)
+                    i += 1
 
     if 'Outlier Analysis' in vizuals:
         st.subheader('Outlier Analysis')
@@ -140,44 +145,47 @@ if dataset:
         c2.dataframe(functions.number_of_outliers(df))
 
     if 'Variance of Target with Categorical Columns' in vizuals:
-        st.subheader('Variance of target variable with categorical columns')
-        df_1 = df.dropna()
-        
-        high_cardi_columns = []
-        normal_cardi_columns = []
-
-        for i in cat_columns:
-            if (df[i].nunique() > df.shape[0] / 10):
-                high_cardi_columns.append(i)
-            else:
-                normal_cardi_columns.append(i)
-
-        selected_cat_cols = functions.sidebar_multiselect_container('Choose columns for Category Colored Box plots:', normal_cardi_columns, 'Category')
-        
-        if 'Target Analysis' not in vizuals:   
-            target_column = st.selectbox("Select target column:", df.columns, index = len(df.columns) - 1)
-        
-        i = 0
-        while (i < len(selected_cat_cols)):
-    
-            fig = px.box(df_1, y = target_column, color = selected_cat_cols[i])
-            st.plotly_chart(fig, use_container_width = True)
-            i += 1
-
-        if high_cardi_columns:
-            if len(high_cardi_columns) == 1:
-                st.subheader('The following column has high cardinality, that is why its boxplot was not plotted:')
-            else:
-                st.subheader('The following columns have high cardinality, that is why its boxplot was not plotted:')
-            for i in high_cardi_columns:
-                st.write(i)
+        if len(cat_columns) == 0:
+            st.write('There is no categorical columns in the data.')
+        else:
+            st.subheader('Variance of target variable with categorical columns')
+            df_1 = df.dropna()
             
-            st.write('<p style="font-size:140%">Do you want to plot anyway?</p>', unsafe_allow_html=True)    
-            answer = st.selectbox("", ('No', 'Yes'))
+            high_cardi_columns = []
+            normal_cardi_columns = []
 
-            if answer == 'Yes':
+            for i in cat_columns:
+                if (df[i].nunique() > df.shape[0] / 10):
+                    high_cardi_columns.append(i)
+                else:
+                    normal_cardi_columns.append(i)
+
+            selected_cat_cols = functions.sidebar_multiselect_container('Choose columns for Category Colored Box plots:', normal_cardi_columns, 'Category')
+            
+            if 'Target Analysis' not in vizuals:   
+                target_column = st.selectbox("Select target column:", df.columns, index = len(df.columns) - 1)
+            
+            i = 0
+            while (i < len(selected_cat_cols)):
+        
+                fig = px.box(df_1, y = target_column, color = selected_cat_cols[i])
+                st.plotly_chart(fig, use_container_width = True)
+                i += 1
+
+            if high_cardi_columns:
+                if len(high_cardi_columns) == 1:
+                    st.subheader('The following column has high cardinality, that is why its boxplot was not plotted:')
+                else:
+                    st.subheader('The following columns have high cardinality, that is why its boxplot was not plotted:')
                 for i in high_cardi_columns:
-                    fig = px.box(df_1, y = target_column, color = i)
-                    st.plotly_chart(fig, use_container_width = True)
+                    st.write(i)
+                
+                st.write('<p style="font-size:140%">Do you want to plot anyway?</p>', unsafe_allow_html=True)    
+                answer = st.selectbox("", ('No', 'Yes'))
+
+                if answer == 'Yes':
+                    for i in high_cardi_columns:
+                        fig = px.box(df_1, y = target_column, color = i)
+                        st.plotly_chart(fig, use_container_width = True)
 
     
