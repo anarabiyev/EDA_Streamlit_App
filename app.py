@@ -49,7 +49,7 @@ if dataset:
                    'Distribution of Numerical Columns', 'Count Plots of Categorical Columns', 
                    'Box Plots', 'Outlier Analysis', 'Variance of Target with Categorical Columns']
     functions.sidebar_space(3)         
-    vizuals = st.sidebar.multiselect("Choose which vizualizations you want to see 👇", all_vizuals)
+    vizuals = st.sidebar.multiselect("Choose which visualizations you want to see 👇", all_vizuals)
 
     if 'Info' in vizuals:
         st.subheader('Info:')
