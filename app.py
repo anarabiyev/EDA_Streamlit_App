@@ -44,17 +44,23 @@ if dataset:
     st.write(f'<p style="font-size:130%">Dataset contains {n} rows and {m} columns.</p>', unsafe_allow_html=True)   
     st.dataframe(df)
 
+    # Display 'Info' by default
+    st.subheader('Info:')
+    c1, c2, c3 = st.columns([1, 2, 1])
+    c2.dataframe(functions.df_info(df))
 
-    all_vizuals = ['Info', 'NA Info', 'Descriptive Analysis', 'Target Analysis', 
+
+    all_vizuals = ['NA Info', 'Descriptive Analysis', 'Target Analysis', 
                    'Distribution of Numerical Columns', 'Count Plots of Categorical Columns', 
                    'Box Plots', 'Outlier Analysis', 'Variance of Target with Categorical Columns']
     functions.sidebar_space(3)         
     vizuals = st.sidebar.multiselect("Choose which visualizations you want to see 👇", all_vizuals)
 
-    if 'Info' in vizuals:
-        st.subheader('Info:')
-        c1, c2, c3 = st.columns([1, 2, 1])
-        c2.dataframe(functions.df_info(df))
+    #TODO: REMOVE AFTER TESTING
+    # if 'Info' in vizuals:
+    #     st.subheader('Info:')
+    #     c1, c2, c3 = st.columns([1, 2, 1])
+    #     c2.dataframe(functions.df_info(df))
 
     if 'NA Info' in vizuals:
         st.subheader('NA Value Information:')
